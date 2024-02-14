@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data</title>
+    <style>
+        body {
+            
+            background-color: #e83a3a;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+    width: 800px; 
+    margin: 20px auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 5px;
+   
+}
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px; 
+        }
+        p {
+            color: #0e0e0e;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+        }
+        button {
+            padding: 10px 20px;
+            
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome :  <%= user.username %></h1>
+        <p>Name : <%= user.username %></p>
+        <p>Email : <%= user.email %></p>
+
+        <!-- Button container to align buttons in a row -->
+        <div class="button-container">
+           
+           
+
+            <!-- Edit button for the current user -->
+            <form action="/users/<%= user._id %>/edit" method="GET" >
+                <button type="submit" style="background-color: #007bff;">Edit User</button>
+            </form>
+
+            <!-- Delete button for the current user -->
+            <form action="/users/delete" id="deleteUserForm" method="POST">
+                <input type="hidden" name="userId" value="<%= user._id %>">
+                <button type="submit" onclick="confirmDelete()" style="background-color: red;">Delete User</button>
+            </form>
+         
+            
+
+
+            <form action="/logout" method="GET">
+                <button type="submit" style="background-color: grey;" >Logout</button>
+            </form>
+
+        </div>
+
+       
+    </div>
+    <script>
+        function confirmDelete(){
+            if (confirm("Are you sure you want to delete this user?")) {
+            
+            document.getElementById("deleteUserForm").submit();
+        } else {
+
+            return false;
+        }
+        }
+    </script>
+
+    
+</body>
+</html>

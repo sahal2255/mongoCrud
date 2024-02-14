@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            
+            background-color: #f50808;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height:100vh;
+        }
+
+        .container {
+            width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+            width: 100px;
+            margin:  auto;
+        }
+        .signup-button {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .signup-button p {
+             margin-bottom: 10px;
+        }
+
+        .signup-button button {
+            padding: 10px 20px;
+            background-color: green;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .errmsg{
+            color: red;
+        }
+        span{
+            color: red;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <% if (error) { %>
+            <p class="errmsg"><%= error %></p>
+        <% } %>
+        <form action="/login" method="POST">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" >
+            <span id="emailError"></span>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+            <span id="passwordError"></span>
+            <button type="submit" id="logBtn">Login</button>
+        </form>
+
+       
+        <div class="signup-button">
+            <p style="text-align: center; margin-bottom: 10px;">New User?</p>
+            <form action="/sign" method="GET">
+                <button type="submit">Sign up</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        const loginForm = document.getElementById('login-form');
+        
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            // Reset previous error messages
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            let isFormValid = true;
+
+
+            if (!isValidEmail(email)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email address';
+                isFormValid = false;
+            }
+
+            if (!isValidPassword(password)) {
+                document.getElementById('passwordError').textContent = 'Password must be at least 6 characters long';
+                isFormValid = false;
+            }
+
+            if (isFormValid) {
+            const formData = new FormData(loginForm);
+            const responseData = await fetch('/login', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.json());
+
+            if (responseData.error) {
+                alert(responseData.error);
+            } else {
+                window.location.href = '/users';
+            }
+        }
+        });
+
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function isValidPassword(password) {
+            return password.length >= 6;
+        }
+       
+    </script>
+
+</body>
+</html>
