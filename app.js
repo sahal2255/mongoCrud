@@ -92,8 +92,8 @@ app.post('/sign', async (req, res) => {
             const HidePassword = await bcrypt.hash(password,10)
             const newUser = new User({ username, email, password:HidePassword });
             await newUser.save();
-            req.session.user = newUser;
-            res.redirect('/users');
+            // req.session.user = newUser;
+            res.redirect('/');
         }
     } catch (error) {
         console.error('Error signing up:', error);
@@ -154,12 +154,11 @@ app.post('/users/edit', async (req, res) => {
             return res.status(404).send('User not found');
         }
 
-        // Check if the user trying to edit is the same as the session user
         if (user._id.toString() !== userId.toString()) {
             return res.status(401).send('Unauthorized');
         }
 
-        // Update user fields if they are provided in the request body
+        // Update user fields 
         if (username) {
             user.username = username;
         }
